@@ -53,5 +53,4 @@ public class Order {
     public boolean isPlacedBy(User customer) {
         return this.customer.equals(customer);
     }
-
 }
