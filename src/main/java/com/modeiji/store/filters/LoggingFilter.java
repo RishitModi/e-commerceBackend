@@ -13,8 +13,8 @@ import java.io.IOException;
 public class LoggingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("Request: " + request.getRequestURI());
-        filterChain.doFilter(request, response);
-        System.out.println("Response: " + response.getStatus());
+        System.out.println("Request: " + request.getRequestURI()); // done before req arrives
+        filterChain.doFilter(request, response);        //req gets executed
+        System.out.println("Response: " + response.getStatus()); //after req gets eecuted
     }
 }
