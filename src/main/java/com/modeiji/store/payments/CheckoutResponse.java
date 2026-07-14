@@ -1,4 +1,4 @@
-package com.modeiji.store.dtos;
+package com.modeiji.store.payments;
 
 import lombok.Data;
 

@@ -1,4 +1,4 @@
-package com.modeiji.store.config;
+package com.modeiji.store.payments;
 
 import com.stripe.Stripe;
 import jakarta.annotation.PostConstruct;

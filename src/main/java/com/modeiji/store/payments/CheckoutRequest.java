@@ -1,4 +1,4 @@
-package com.modeiji.store.dtos;
+package com.modeiji.store.payments;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
