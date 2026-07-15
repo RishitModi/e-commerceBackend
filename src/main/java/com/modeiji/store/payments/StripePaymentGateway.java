@@ -1,8 +1,7 @@
 package com.modeiji.store.payments;
 
-import com.modeiji.store.entities.Order;
-import com.modeiji.store.entities.OrderItem;
-import com.modeiji.store.entities.PaymentStatus;
+import com.modeiji.store.orders.Order;
+import com.modeiji.store.orders.OrderItem;
 import com.stripe.exception.SignatureVerificationException;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Event;

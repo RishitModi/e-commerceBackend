@@ -1,16 +1,11 @@
 package com.modeiji.store.payments;
 
-import com.modeiji.store.dtos.ErrorDto;
-import com.modeiji.store.entities.OrderStatus;
-import com.modeiji.store.exceptions.CartEmptyException;
-import com.modeiji.store.exceptions.CartNotFoundException;
-import com.modeiji.store.repositories.OrderRepository;
-import com.stripe.exception.SignatureVerificationException;
-import com.stripe.model.PaymentIntent;
-import com.stripe.net.Webhook;
+import com.modeiji.store.common.ErrorDto;
+import com.modeiji.store.carts.CartEmptyException;
+import com.modeiji.store.carts.CartNotFoundException;
+import com.modeiji.store.orders.OrderRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

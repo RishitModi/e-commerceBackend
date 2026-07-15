@@ -1,6 +1,6 @@
 package com.modeiji.store.payments;
 
-import com.modeiji.store.entities.Order;
+import com.modeiji.store.orders.Order;
 
 import java.util.Optional;
 

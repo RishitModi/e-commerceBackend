@@ -1,6 +1,5 @@
 package com.modeiji.store.payments;
 
-import com.modeiji.store.entities.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

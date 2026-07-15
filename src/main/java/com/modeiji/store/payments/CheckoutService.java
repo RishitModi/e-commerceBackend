@@ -1,12 +1,12 @@
 package com.modeiji.store.payments;
 
-import com.modeiji.store.entities.Order;
-import com.modeiji.store.exceptions.CartEmptyException;
-import com.modeiji.store.exceptions.CartNotFoundException;
-import com.modeiji.store.repositories.CartRepository;
-import com.modeiji.store.repositories.OrderRepository;
-import com.modeiji.store.services.AuthService;
-import com.modeiji.store.services.CartService;
+import com.modeiji.store.orders.Order;
+import com.modeiji.store.carts.CartEmptyException;
+import com.modeiji.store.carts.CartNotFoundException;
+import com.modeiji.store.carts.CartRepository;
+import com.modeiji.store.orders.OrderRepository;
+import com.modeiji.store.auth.AuthService;
+import com.modeiji.store.carts.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

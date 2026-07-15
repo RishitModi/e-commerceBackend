@@ -10,7 +10,7 @@ spring:
   jwt:
     secret: ${JWT_SECRET}
     accessTokenExpiration: 7200 # 90m
-    refreshTokenExpiration: 604800 # 7d
+    refreshTokenExpiration: 900 # 7d
 stripe:
   secretKey: ${STRIPE_SECRET_KEY}
   webhookSecretKey: ${STRIPE_WEBHOOK_SECRET_KEY}
