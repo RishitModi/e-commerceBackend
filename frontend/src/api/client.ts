@@ -20,5 +20,17 @@ export async function apiFetch<T>(
     throw new Error(`Request failed with status ${response.status}`)
   }
 
+  const contentLength = response.headers.get('content-length')
+  const contentType = response.headers.get('content-type')
+
+  if (
+    response.status === 204 ||
+    contentLength === '0' ||
+    !contentType ||
+    !contentType.toLowerCase().includes('application/json')
+  ) {
+    return undefined as T
+  }
+
   return (await response.json()) as T
 }
