@@ -6,16 +6,19 @@ import type { OrderDto } from '../types/order'
 export default function Orders() {
   const { accessToken, user } = useAuth()
   const [orders, setOrders] = useState<OrderDto[]>([])
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!accessToken) {
       setOrders([])
+      setLoading(false)
       return
     }
 
     const loadOrders = async () => {
       try {
+        setLoading(true)
         setError(null)
         const result = await getAllOrders(accessToken)
         setOrders(result)
@@ -26,6 +29,8 @@ export default function Orders() {
         }
 
         setError('Failed to load orders')
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -34,6 +39,10 @@ export default function Orders() {
 
   if (!user) {
     return <p>Log in to see your orders</p>
+  }
+
+  if (loading) {
+    return <div className="loading-state">Loading your orders...</div>
   }
 
   return (
@@ -47,13 +56,13 @@ export default function Orders() {
           {orders.map((order) => (
             <li key={order.id}>
               <p>
-                Order #{order.id} — {order.status} —{' '}
-                {new Date(order.createdAt).toLocaleDateString()} — Total: ${order.totalPrice.toFixed(2)}
+                Order #{order.id} ï¿½ {order.status} ï¿½{' '}
+                {new Date(order.createdAt).toLocaleDateString()} ï¿½ Total: ${order.totalPrice.toFixed(2)}
               </p>
               <ul>
                 {order.items.map((item) => (
                   <li key={item.product.id}>
-                    {item.product.name} x{item.quantity} — ${item.totalPrice.toFixed(2)}
+                    {item.product.name} x{item.quantity} ï¿½ ${item.totalPrice.toFixed(2)}
                   </li>
                 ))}
               </ul>
