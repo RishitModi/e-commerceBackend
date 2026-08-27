@@ -1,8 +1,10 @@
-import { FormEvent, useState } from 'react'
+import {type FormEvent, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export default function Login() {
   const { loginUser } = useAuth()
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -13,6 +15,7 @@ export default function Login() {
 
     try {
       await loginUser(email, password)
+      navigate('/')
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message)

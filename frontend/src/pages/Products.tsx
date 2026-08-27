@@ -1,0 +1,69 @@
+import { useEffect, useState } from 'react'
+import { getAllProducts } from '../api/products'
+import { useCart } from '../context/CartContext'
+import type { ProductDto } from '../types/product'
+
+export default function Products() {
+  const { addItem } = useCart()
+  const [products, setProducts] = useState<ProductDto[]>([])
+  const [error, setError] = useState<string | null>(null)
+  const [addingProductIds, setAddingProductIds] = useState<Set<number>>(new Set())
+
+  const handleAddToCart = async (productId: number) => {
+    setAddingProductIds((previous) => {
+      const next = new Set(previous)
+      next.add(productId)
+      return next
+    })
+
+    try {
+      await addItem(productId)
+    } finally {
+      setAddingProductIds((previous) => {
+        const next = new Set(previous)
+        next.delete(productId)
+        return next
+      })
+    }
+  }
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const result = await getAllProducts()
+        setProducts(result)
+      } catch (err) {
+        if (err instanceof Error) {
+          setError(err.message)
+          return
+        }
+
+        setError('Failed to load products')
+      }
+    }
+
+    void loadProducts()
+  }, [])
+
+  if (error) {
+    return <p>{error}</p>
+  }
+
+  return (
+    <div className="page">
+      <ul className="product-list">
+        {products.map((product) => (
+          <li key={product.id} className="product-card">
+            {product.name} � ${product.price.toFixed(2)}
+            <button
+              onClick={() => void handleAddToCart(product.id)}
+              disabled={addingProductIds.has(product.id)}
+            >
+              {addingProductIds.has(product.id) ? 'Adding...' : 'Add to Cart'}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
