@@ -56,13 +56,13 @@ export default function Orders() {
           {orders.map((order) => (
             <li key={order.id}>
               <p>
-                Order #{order.id} � {order.status} �{' '}
-                {new Date(order.createdAt).toLocaleDateString()} � Total: ${order.totalPrice.toFixed(2)}
+                Order #{order.id} {'\u2014'} {order.status} {'\u2014'}{' '}
+                {new Date(order.createdAt).toLocaleDateString()} {'\u2014'} Total: ${order.totalPrice.toFixed(2)}
               </p>
               <ul>
                 {order.items.map((item) => (
                   <li key={item.product.id}>
-                    {item.product.name} x{item.quantity} � ${item.totalPrice.toFixed(2)}
+                    {item.product.name} x{item.quantity} {'\u2014'} ${item.totalPrice.toFixed(2)}
                   </li>
                 ))}
               </ul>

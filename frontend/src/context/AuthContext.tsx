@@ -7,10 +7,12 @@ import {
 } from 'react'
 import { getCurrentUser, login } from '../api/auth'
 import type { UserDto } from '../types/user'
+import { decodeJwtPayload } from '../utils/jwt'
 
 type AuthContextValue = {
   accessToken: string | null
   user: UserDto | null
+  isAdmin: boolean
   loginUser: (email: string, password: string) => Promise<void>
   logout: () => void
 }
@@ -33,9 +35,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null)
   }
 
+  const isAdmin = useMemo(() => {
+    if (!accessToken) {
+      return false
+    }
+
+    const payload = decodeJwtPayload(accessToken)
+    return payload?.role === 'ADMIN'
+  }, [accessToken])
+
   const value = useMemo(
-    () => ({ accessToken, user, loginUser, logout }),
-    [accessToken, user],
+    () => ({ accessToken, user, isAdmin, loginUser, logout }),
+    [accessToken, user, isAdmin],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

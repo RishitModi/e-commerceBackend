@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext'
 import { useCart } from '../context/CartContext'
 
 export default function Navbar() {
-  const { user, logout } = useAuth()
+  const { user, isAdmin, logout } = useAuth()
   const { cart } = useCart()
   const cartItemCount =
     cart?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0
@@ -13,7 +13,8 @@ export default function Navbar() {
       <div>
         <Link to="/">Products</Link> <Link to="/cart">Cart</Link>
         {cartItemCount > 0 ? ` (${cartItemCount})` : null}{' '}
-        <Link to="/orders">Orders</Link>
+        <Link to="/orders">Orders</Link>{' '}
+        {isAdmin ? <Link to="/admin/products">Admin</Link> : null}
       </div>
       <div>
         {user ? (

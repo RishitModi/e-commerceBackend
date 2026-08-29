@@ -67,7 +67,7 @@ export default function Products() {
         <ul className="product-list">
           {products.map((product) => (
             <li key={product.id} className="product-card">
-              {product.name} � ${product.price.toFixed(2)}
+              {product.name} {'\u2014'} ${product.price.toFixed(2)}
               <button
                 onClick={() => void handleAddToCart(product.id, product.name)}
                 disabled={addingProductIds.has(product.id)}

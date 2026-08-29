@@ -49,7 +49,7 @@ export default function CartSummary() {
       <ul>
         {cart.items.map((item) => (
           <li key={item.product.id}>
-            {item.product.name} x{item.quantity} � ${item.totalPrice.toFixed(2)}
+            {item.product.name} x{item.quantity} {'\u2014'} ${item.totalPrice.toFixed(2)}
             <div className="quantity-stepper">
               <button
                 onClick={() => void handleDecrement(item.product.id, item.quantity)}
