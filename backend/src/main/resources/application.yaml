@@ -10,3 +10,5 @@ spring:
 stripe:
   secretKey: ${STRIPE_SECRET_KEY}
   webhookSecretKey: ${STRIPE_WEBHOOK_SECRET_KEY}
+pexels:
+  apiKey: ${PEXELS_API_KEY}

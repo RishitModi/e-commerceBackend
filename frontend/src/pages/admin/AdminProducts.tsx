@@ -70,18 +70,18 @@ export default function AdminProducts() {
 
   return (
     <AdminRoute>
-      <section>
-        <h2>Manage Products</h2>
-        <p>
+      <section className="page">
+        <div className="page-header">
+          <h2>Manage Products</h2>
           <Link to="/admin/products/new">+ New Product</Link>
-        </p>
+        </div>
         {error ? <p>{error}</p> : null}
         {loading ? (
           <div className="loading-state">Loading products...</div>
         ) : products.length === 0 ? (
           <p>No products available</p>
         ) : (
-          <table>
+          <table className="admin-table">
             <thead>
               <tr>
                 <th>Name</th>
@@ -99,6 +99,7 @@ export default function AdminProducts() {
                   <td>
                     <Link to={`/admin/products/${product.id}/edit`}>Edit</Link>{' '}
                     <button
+                      className="button-danger"
                       onClick={() => void handleDelete(product.id)}
                       disabled={deletingProductIds.has(product.id)}
                     >

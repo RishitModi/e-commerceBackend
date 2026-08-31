@@ -81,6 +81,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/products/*/image").hasRole(Role.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/products/backfill-images").hasRole(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, "/products/**").hasRole(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.PUT, "/products/**").hasRole(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.DELETE, "/products/**").hasRole(Role.ADMIN.name())

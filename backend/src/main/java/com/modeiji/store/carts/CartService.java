@@ -1,6 +1,7 @@
 package com.modeiji.store.carts;
 
 import com.modeiji.store.products.ProductNotFoundException;
+import com.modeiji.store.products.PexelsImageService;
 import com.modeiji.store.products.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ public class CartService {
     private CartRepository cartRepository;
     private CartMapper cartMapper;
     private ProductRepository productRepository;
+    private PexelsImageService pexelsImageService;
 
     public CartDto createCart() {
         var cart = new Cart();
@@ -32,6 +34,7 @@ public class CartService {
             throw new ProductNotFoundException();
         }
 
+        product = pexelsImageService.ensureImageUrl(product, productRepository);
         var cartItem = cart.addItem(product);
 
         cartRepository.save(cart);

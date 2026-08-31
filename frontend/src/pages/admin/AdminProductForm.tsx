@@ -123,14 +123,14 @@ export default function AdminProductForm() {
 
   return (
     <AdminRoute>
-      <section>
+      <section className="page">
         <h2>{isEditMode ? 'Edit Product' : 'Create Product'}</h2>
         {loading ? (
           <div className="loading-state">Loading form...</div>
         ) : (
-          <form onSubmit={onSubmit}>
-            <div>
-              <label htmlFor="product-name">Name</label>
+          <form className="admin-form" onSubmit={onSubmit}>
+            <label htmlFor="product-name">
+              Name
               <input
                 id="product-name"
                 type="text"
@@ -138,10 +138,10 @@ export default function AdminProductForm() {
                 onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
                 required
               />
-            </div>
+            </label>
 
-            <div>
-              <label htmlFor="product-description">Description</label>
+            <label htmlFor="product-description">
+              Description
               <textarea
                 id="product-description"
                 value={form.description}
@@ -150,10 +150,10 @@ export default function AdminProductForm() {
                 }
                 required
               />
-            </div>
+            </label>
 
-            <div>
-              <label htmlFor="product-price">Price</label>
+            <label htmlFor="product-price">
+              Price
               <input
                 id="product-price"
                 type="number"
@@ -162,10 +162,10 @@ export default function AdminProductForm() {
                 onChange={(event) => setForm((prev) => ({ ...prev, price: event.target.value }))}
                 required
               />
-            </div>
+            </label>
 
-            <div>
-              <label htmlFor="product-category">Category</label>
+            <label htmlFor="product-category">
+              Category
               <select
                 id="product-category"
                 value={form.categoryId}
@@ -181,7 +181,7 @@ export default function AdminProductForm() {
                   </option>
                 ))}
               </select>
-            </div>
+            </label>
 
             <button type="submit" disabled={submitting}>
               {submitting ? 'Saving...' : isEditMode ? 'Update Product' : 'Create Product'}

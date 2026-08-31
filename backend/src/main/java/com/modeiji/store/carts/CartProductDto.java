@@ -8,5 +8,6 @@ import java.math.BigDecimal;
 public class CartProductDto {
     private Long id;
     private String name;
+    private String imageUrl;
     private BigDecimal price;
 }

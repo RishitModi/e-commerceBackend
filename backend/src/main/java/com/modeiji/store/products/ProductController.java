@@ -1,11 +1,14 @@
 package com.modeiji.store.products;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @AllArgsConstructor
 @RestController
@@ -14,6 +17,7 @@ public class ProductController {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final CategoryRepository categoryRepository;
+    private final PexelsImageService pexelsImageService;
 
     @GetMapping
     public List<ProductDto> getAllProducts(
@@ -26,6 +30,10 @@ public class ProductController {
             products = productRepository.findAllWithCategory();
         }
 
+        products = products.stream()
+            .map(product -> pexelsImageService.ensureImageUrl(product, productRepository))
+            .toList();
+
         return products.stream().map(productMapper::toDto).toList();
     }
 
@@ -35,6 +43,7 @@ public class ProductController {
         if (product == null) {
             return ResponseEntity.notFound().build();
         }
+        product = pexelsImageService.ensureImageUrl(product, productRepository);
         return ResponseEntity.ok(productMapper.toDto(product));
     }
 
@@ -49,6 +58,7 @@ public class ProductController {
 
         var product = productMapper.toEntity(productDto);
         product.setCategory(category);
+        product = pexelsImageService.ensureImageUrl(product, productRepository);
         productRepository.save(product);
         productDto.setId(product.getId());
 
@@ -89,5 +99,53 @@ public class ProductController {
         productRepository.delete(product);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{id}/image")
+    public ResponseEntity<?> fetchAndSaveProductImage(@PathVariable Long id) {
+        var product = productRepository.findById(id).orElse(null);
+        if (product == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        var imageUrl = pexelsImageService.findImageUrl(product.getName());
+        if (imageUrl.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body("No image found for product");
+        }
+
+        product.setImageUrl(imageUrl.get());
+        productRepository.save(product);
+        return ResponseEntity.ok(productMapper.toDto(product));
+    }
+
+    @PostMapping("/backfill-images")
+    public Map<String, Integer> backfillProductImages() {
+        var products = productRepository.findAll();
+        int checked = 0;
+        int updated = 0;
+        int noMatch = 0;
+
+        for (var product : products) {
+            if (product.getImageUrl() != null && !product.getImageUrl().isBlank()) {
+                continue;
+            }
+
+            checked++;
+            var imageUrl = pexelsImageService.findImageUrl(product.getName());
+            if (imageUrl.isPresent()) {
+                product.setImageUrl(imageUrl.get());
+                productRepository.save(product);
+                updated++;
+            } else {
+                noMatch++;
+            }
+        }
+
+        var summary = new LinkedHashMap<String, Integer>();
+        summary.put("checked", checked);
+        summary.put("updated", updated);
+        summary.put("noMatch", noMatch);
+        return summary;
     }
 }

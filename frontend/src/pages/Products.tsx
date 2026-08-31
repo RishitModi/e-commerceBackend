@@ -1,16 +1,34 @@
-import { useEffect, useState } from 'react'
-import { getAllProducts } from '../api/products'
+import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { getAllCategories } from '../api/categories'
+import { getAllProducts, getProductsByCategory } from '../api/products'
 import { useCart } from '../context/CartContext'
 import { useToast } from '../context/ToastContext'
+import type { CategoryDto } from '../types/category'
 import type { ProductDto } from '../types/product'
 
 export default function Products() {
   const { addItem } = useCart()
   const { showToast } = useToast()
   const [products, setProducts] = useState<ProductDto[]>([])
+  const [categories, setCategories] = useState<CategoryDto[]>([])
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [addingProductIds, setAddingProductIds] = useState<Set<number>>(new Set())
+
+  const categoryThumbnails = useMemo(() => {
+    const map = new Map<number, string>()
+
+    for (const product of products) {
+      if (product.categoryId === null || product.imageUrl == null || map.has(product.categoryId)) {
+        continue
+      }
+      map.set(product.categoryId, product.imageUrl)
+    }
+
+    return map
+  }, [products])
 
   const handleAddToCart = async (productId: number, productName: string) => {
     setAddingProductIds((previous) => {
@@ -32,9 +50,27 @@ export default function Products() {
   }
 
   useEffect(() => {
+    const loadCategories = async () => {
+      try {
+        const result = await getAllCategories()
+        setCategories(result)
+      } catch {
+        setCategories([])
+      }
+    }
+
+    void loadCategories()
+  }, [])
+
+  useEffect(() => {
     const loadProducts = async () => {
       try {
-        const result = await getAllProducts()
+        setLoading(true)
+        setError(null)
+        const result =
+          selectedCategoryId === null
+            ? await getAllProducts()
+            : await getProductsByCategory(selectedCategoryId)
         setProducts(result)
       } catch (err) {
         if (err instanceof Error) {
@@ -49,7 +85,7 @@ export default function Products() {
     }
 
     void loadProducts()
-  }, [])
+  }, [selectedCategoryId])
 
   if (error) {
     return <p>{error}</p>
@@ -61,22 +97,52 @@ export default function Products() {
 
   return (
     <div className="page">
+      <div className="category-grid">
+        {categories.map((category) => {
+          const thumbnail = categoryThumbnails.get(category.id)
+          return (
+            <div
+              key={category.id}
+              className={`category-tile${category.id === selectedCategoryId ? ' active' : ''}`}
+              style={{ backgroundImage: thumbnail ? `url(${thumbnail})` : undefined }}
+              onClick={() =>
+                setSelectedCategoryId((previous) =>
+                  previous === category.id ? null : category.id,
+                )
+              }
+            >
+              <span>{category.name}</span>
+            </div>
+          )
+        })}
+      </div>
+
       {products.length === 0 ? (
         <p>No products available</p>
       ) : (
-        <ul className="product-list">
+        <div className="product-list">
           {products.map((product) => (
-            <li key={product.id} className="product-card">
-              {product.name} {'\u2014'} ${product.price.toFixed(2)}
+            <article key={product.id} className="product-card">
+              <Link to={`/products/${product.id}`}>
+                {product.imageUrl ? (
+                  <img src={product.imageUrl || undefined} alt={product.name} />
+                ) : (
+                  <div className="image-placeholder" aria-hidden="true" />
+                )}
+              </Link>
+              <h2>
+                <Link to={`/products/${product.id}`}>{product.name}</Link>
+              </h2>
+              <p>${product.price.toFixed(2)}</p>
               <button
                 onClick={() => void handleAddToCart(product.id, product.name)}
                 disabled={addingProductIds.has(product.id)}
               >
                 {addingProductIds.has(product.id) ? 'Adding...' : 'Add to Cart'}
               </button>
-            </li>
+            </article>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   )

@@ -45,11 +45,22 @@ export default function CartSummary() {
   }
 
   return (
-    <>
-      <ul>
-        {cart.items.map((item) => (
-          <li key={item.product.id}>
-            {item.product.name} x{item.quantity} {'\u2014'} ${item.totalPrice.toFixed(2)}
+    <div>
+      {cart.items.map((item) => (
+        <div key={item.product.id} className="cart-item-row">
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            {item.product.imageUrl ? (
+              <img
+                className="cart-item-thumb"
+                src={item.product.imageUrl || undefined}
+                alt={item.product.name}
+              />
+            ) : (
+              <div className="cart-item-thumb-placeholder" aria-hidden="true" />
+            )}
+            <span>{item.product.name} {'\u2014'} ${item.totalPrice.toFixed(2)}</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <div className="quantity-stepper">
               <button
                 onClick={() => void handleDecrement(item.product.id, item.quantity)}
@@ -65,11 +76,10 @@ export default function CartSummary() {
                 +
               </button>
             </div>
-            <button onClick={() => void removeItem(item.product.id)}>Remove</button>
-          </li>
-        ))}
-      </ul>
-      <p>Total: ${cart.totalPrice.toFixed(2)}</p>
-    </>
+            <button className="button-danger" onClick={() => void removeItem(item.product.id)}>Remove</button>
+          </div>
+        </div>
+      ))}
+    </div>
   )
 }

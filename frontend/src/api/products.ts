@@ -5,6 +5,14 @@ export function getAllProducts(): Promise<ProductDto[]> {
   return apiFetch<ProductDto[]>('/products')
 }
 
+export function getProductsByCategory(categoryId: number): Promise<ProductDto[]> {
+  return apiFetch<ProductDto[]>(`/products?categoryId=${categoryId}`)
+}
+
+export function getProduct(id: number): Promise<ProductDto> {
+  return apiFetch<ProductDto>(`/products/${id}`)
+}
+
 export function deleteProduct(id: number, accessToken: string): Promise<void> {
   return apiFetch<void>(`/products/${id}`, {
     method: 'DELETE',

@@ -2,6 +2,7 @@ export interface CartProductDto {
   id: number
   name: string
   price: number
+  imageUrl: string | null
 }
 
 export interface CartItemDto {

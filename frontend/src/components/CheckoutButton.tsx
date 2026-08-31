@@ -41,7 +41,7 @@ export default function CheckoutButton() {
 
   return (
     <>
-      <button onClick={() => void handleCheckout()} disabled={isRedirecting}>
+      <button className="cta-button" onClick={() => void handleCheckout()} disabled={isRedirecting}>
         {isRedirecting ? 'Redirecting...' : 'Checkout'}
       </button>
       {error ? <p>{error}</p> : null}

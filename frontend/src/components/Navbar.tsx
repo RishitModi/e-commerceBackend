@@ -10,16 +10,25 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <div>
-        <Link to="/">Products</Link> <Link to="/cart">Cart</Link>
-        {cartItemCount > 0 ? ` (${cartItemCount})` : null}{' '}
-        <Link to="/orders">Orders</Link>{' '}
+      <Link to="/" className="navbar-logo">Modeiji Store</Link>
+
+      <div className="navbar-links">
+        <Link to="/">Products</Link>
+        <Link to="/cart">
+          <span className="navbar-cart">
+            <span>Cart</span>
+            {cartItemCount > 0 ? <span>({cartItemCount})</span> : null}
+          </span>
+        </Link>
+        <Link to="/orders">Orders</Link>
         {isAdmin ? <Link to="/admin/products">Admin</Link> : null}
       </div>
-      <div>
+
+      <div className="navbar-auth">
         {user ? (
           <>
-            <span>{user.name}</span> <button onClick={logout}>Logout</button>
+            <span>{user.name}</span>
+            <button className="button-danger" onClick={logout}>Logout</button>
           </>
         ) : (
           <Link to="/login">Login</Link>

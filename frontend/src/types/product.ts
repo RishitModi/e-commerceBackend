@@ -4,4 +4,5 @@ export interface ProductDto {
   price: number
   description: string
   categoryId: number | null
+  imageUrl: string | null
 }

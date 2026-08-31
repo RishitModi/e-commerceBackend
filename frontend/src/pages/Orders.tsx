@@ -46,29 +46,37 @@ export default function Orders() {
   }
 
   return (
-    <section>
+    <section className="page">
       <h2>My Orders</h2>
       {error ? <p>{error}</p> : null}
       {orders.length === 0 ? (
         <p>No orders yet.</p>
       ) : (
-        <ul>
+        <div className="order-list">
           {orders.map((order) => (
-            <li key={order.id}>
-              <p>
-                Order #{order.id} {'\u2014'} {order.status} {'\u2014'}{' '}
-                {new Date(order.createdAt).toLocaleDateString()} {'\u2014'} Total: ${order.totalPrice.toFixed(2)}
-              </p>
-              <ul>
-                {order.items.map((item) => (
-                  <li key={item.product.id}>
-                    {item.product.name} x{item.quantity} {'\u2014'} ${item.totalPrice.toFixed(2)}
-                  </li>
-                ))}
-              </ul>
-            </li>
+            <div key={order.id} className="order-card">
+              <div className="order-card-header">
+                <strong>Order #{order.id}</strong>
+                <span className="order-status">{order.status}</span>
+              </div>
+
+              <div style={{ color: 'var(--text)', marginBottom: '12px' }}>
+                {new Date(order.createdAt).toLocaleDateString()}
+              </div>
+
+              {order.items.map((item) => (
+                <div key={item.product.id} className="order-item-row">
+                  <span>
+                    {item.product.name} x{item.quantity}
+                  </span>
+                  <span>${item.totalPrice.toFixed(2)}</span>
+                </div>
+              ))}
+
+              <div className="order-total">Total: ${order.totalPrice.toFixed(2)}</div>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </section>
   )
