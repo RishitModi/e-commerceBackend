@@ -392,14 +392,30 @@ code {
   font-size: 13px;
 }
 
-.category-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px;
+.category-scroll {
+  overflow: hidden;
   margin-bottom: 28px;
+  position: relative;
+}
+
+.category-track {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+  animation: category-scroll-loop 40s linear infinite;
+}
+
+.category-scroll:hover .category-track {
+  animation-play-state: paused;
+}
+
+@keyframes category-scroll-loop {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 .category-tile {
+  flex: 0 0 160px;
   position: relative;
   height: 100px;
   border-radius: 6px;
@@ -409,6 +425,13 @@ code {
   background: var(--code-bg);
   background-size: cover;
   background-position: center;
+  transition: transform 0.2s ease, z-index 0s;
+}
+
+.category-tile:hover {
+  transform: scale(1.12);
+  z-index: 2;
+  box-shadow: var(--card-shadow);
 }
 
 .category-tile::after {

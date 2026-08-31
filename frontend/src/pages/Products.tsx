@@ -97,24 +97,43 @@ export default function Products() {
 
   return (
     <div className="page">
-      <div className="category-grid">
-        {categories.map((category) => {
-          const thumbnail = categoryThumbnails.get(category.id)
-          return (
-            <div
-              key={category.id}
-              className={`category-tile${category.id === selectedCategoryId ? ' active' : ''}`}
-              style={{ backgroundImage: thumbnail ? `url(${thumbnail})` : undefined }}
-              onClick={() =>
-                setSelectedCategoryId((previous) =>
-                  previous === category.id ? null : category.id,
-                )
-              }
-            >
-              <span>{category.name}</span>
-            </div>
-          )
-        })}
+      <div className="category-scroll">
+        <div className="category-track">
+          {categories.map((category) => {
+            const thumbnail = categoryThumbnails.get(category.id)
+            return (
+              <div
+                key={category.id}
+                className={`category-tile${category.id === selectedCategoryId ? ' active' : ''}`}
+                style={{ backgroundImage: thumbnail ? `url(${thumbnail})` : undefined }}
+                onClick={() =>
+                  setSelectedCategoryId((previous) =>
+                    previous === category.id ? null : category.id,
+                  )
+                }
+              >
+                <span>{category.name}</span>
+              </div>
+            )
+          })}
+          {categories.map((category) => {
+            const thumbnail = categoryThumbnails.get(category.id)
+            return (
+              <div
+                key={`dup-${category.id}`}
+                className={`category-tile${category.id === selectedCategoryId ? ' active' : ''}`}
+                style={{ backgroundImage: thumbnail ? `url(${thumbnail})` : undefined }}
+                onClick={() =>
+                  setSelectedCategoryId((previous) =>
+                    previous === category.id ? null : category.id,
+                  )
+                }
+              >
+                <span>{category.name}</span>
+              </div>
+            )
+          })}
+        </div>
       </div>
 
       {products.length === 0 ? (
