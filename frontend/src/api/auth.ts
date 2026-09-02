@@ -22,6 +22,12 @@ export function register(
   })
 }
 
+export function refresh(): Promise<{ token: string }> {
+  return apiFetch<{ token: string }>('/auth/refresh', {
+    method: 'POST',
+  })
+}
+
 export function getCurrentUser(accessToken: string): Promise<UserDto> {
   return apiFetch<UserDto>('/auth/me', {
     headers: {

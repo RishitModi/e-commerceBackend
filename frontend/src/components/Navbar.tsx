@@ -27,7 +27,7 @@ export default function Navbar() {
       <div className="navbar-auth">
         {user ? (
           <>
-            <span>{user.name}</span>
+            <Link to="/account">{user.name}</Link>
             <button className="button-danger" onClick={logout}>Logout</button>
           </>
         ) : (
