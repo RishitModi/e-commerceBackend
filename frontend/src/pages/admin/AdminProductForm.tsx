@@ -9,6 +9,7 @@ import {
 import AdminRoute from '../../components/AdminRoute'
 import { useAuth } from '../../context/AuthContext'
 import type { CategoryDto } from '../../types/category'
+import type { ProductDto } from '../../types/product'
 
 type ProductFormState = {
   name: string
@@ -91,11 +92,12 @@ export default function AdminProductForm() {
     setSubmitting(true)
     setError(null)
 
-    const payload = {
+    const payload: Omit<ProductDto, 'id'> = {
       name: form.name,
       description: form.description,
       price: Number(form.price),
       categoryId: Number(form.categoryId),
+      imageUrl: null,
     }
 
     try {

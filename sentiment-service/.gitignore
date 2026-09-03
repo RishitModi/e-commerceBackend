@@ -1,0 +1,22 @@
+# Python cache/artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Local data and databases
+archive/
+*.sqlite
+*.db
+
+# Local model artifacts (large/generated)
+sentiment-model-export/
+

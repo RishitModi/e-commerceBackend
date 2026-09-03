@@ -80,6 +80,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
                         .requestMatchers(HttpMethod.GET, "/products/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products/*/reviews").permitAll()
                         .requestMatchers(HttpMethod.GET, "/categories/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/products/*/image").hasRole(Role.ADMIN.name())
                         .requestMatchers(HttpMethod.POST, "/products/backfill-images").hasRole(Role.ADMIN.name())

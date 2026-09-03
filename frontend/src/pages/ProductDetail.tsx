@@ -2,9 +2,13 @@ import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { getAllCategories } from '../api/categories'
 import { getProduct } from '../api/products'
+import { getReviews } from '../api/reviews'
+import ReviewForm from '../components/ReviewForm'
+import ReviewList from '../components/ReviewList'
 import { useCart } from '../context/CartContext'
 import type { CategoryDto } from '../types/category'
 import type { ProductDto } from '../types/product'
+import type { ReviewDto } from '../types/review'
 
 export default function ProductDetail() {
   const { id } = useParams()
@@ -15,6 +19,12 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true)
   const [notFound, setNotFound] = useState(false)
   const [adding, setAdding] = useState(false)
+  const [reviews, setReviews] = useState<ReviewDto[]>([])
+
+  const loadReviews = async (targetProductId: number) => {
+    const reviewResult = await getReviews(targetProductId)
+    setReviews(reviewResult)
+  }
 
   useEffect(() => {
     const loadProduct = async () => {
@@ -27,12 +37,14 @@ export default function ProductDetail() {
       try {
         setLoading(true)
         setNotFound(false)
-        const [productResult, categoriesResult] = await Promise.all([
+        const [productResult, categoriesResult, reviewResult] = await Promise.all([
           getProduct(productId),
           getAllCategories(),
+          getReviews(productId),
         ])
         setProduct(productResult)
         setCategories(categoriesResult)
+        setReviews(reviewResult)
       } catch {
         setNotFound(true)
       } finally {
@@ -105,6 +117,11 @@ export default function ProductDetail() {
           </button>
         </div>
       </div>
+      <section style={{ marginTop: '24px', textAlign: 'left' }}>
+        <h2>Reviews</h2>
+        <ReviewList reviews={reviews} />
+        <ReviewForm productId={productId} onSubmitted={() => void loadReviews(productId)} />
+      </section>
     </section>
   )
 }
