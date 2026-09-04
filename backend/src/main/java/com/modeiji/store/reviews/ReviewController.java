@@ -17,11 +17,13 @@ public class ReviewController {
     private final ReviewMapper reviewMapper;
     private final ProductRepository productRepository;
     private final AuthService authService;
+    private final SentimentService sentimentService;
 
     @GetMapping
     public List<ReviewDto> getReviews(@PathVariable Long productId) {
         return reviewRepository.findByProductIdOrderByCreatedAtDesc(productId)
             .stream()
+            .map(review -> sentimentService.ensureSentiment(review, reviewRepository))
             .map(reviewMapper::toDto)
             .toList();
     }
