@@ -5,7 +5,9 @@ from typing import Dict
 
 import torch
 import torch.nn.functional as F
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
@@ -34,6 +36,15 @@ model.to(device)
 model.eval()
 
 app = FastAPI()
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    body = await request.body()
+    print("=== 422 VALIDATION ERROR ===")
+    print("Raw body received:", body)
+    print("Validation errors:", exc.errors())
+    print("============================")
+    return JSONResponse(status_code=422, content={"detail": exc.errors()})
 
 
 class SentimentRequest(BaseModel):

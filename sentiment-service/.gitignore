@@ -20,3 +20,9 @@ archive/
 # Local model artifacts (large/generated)
 sentiment-model-export/
 
+# Trained model artifacts (large binary files, exceeds GitHub's file size limits)
+
+# Raw dataset (large, and shouldn't be committed regardless of size)
+
+# Python
+*.pyc

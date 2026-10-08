@@ -15,7 +15,14 @@ export default function ReviewList({ reviews }: ReviewListProps) {
         <div key={review.id} className="order-card">
           <div className="order-card-header">
             <strong>{review.userName}</strong>
-            <span>Rating: {review.rating}/5</span>
+            <span>
+              Rating: {review.rating}/5
+              {review.sentimentLabel ? (
+                <span className={`sentiment-badge sentiment-${review.sentimentLabel}`}>
+                  {review.sentimentLabel}
+                </span>
+              ) : null}
+            </span>
           </div>
           {review.comment ? <p>{review.comment}</p> : null}
           <div style={{ color: 'var(--text)', marginTop: '12px' }}>

@@ -80,9 +80,46 @@
     color: #4ade80;
   }
 
+  .sentiment-positive {
+    color: #4ade80;
+  }
+
+  .sentiment-neutral {
+    color: #facc15;
+  }
+
+  .sentiment-negative {
+    color: #f87171;
+  }
+
   #social .button-icon {
     filter: invert(1) brightness(2);
   }
+}
+
+.sentiment-badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  margin-left: 8px;
+}
+
+.sentiment-positive {
+  background: rgba(22, 163, 74, 0.12);
+  color: #16a34a;
+}
+
+.sentiment-neutral {
+  background: rgba(234, 179, 8, 0.12);
+  color: #a16207;
+}
+
+.sentiment-negative {
+  background: rgba(220, 38, 38, 0.12);
+  color: #dc2626;
 }
 
 body {

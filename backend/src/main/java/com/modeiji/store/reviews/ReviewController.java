@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -26,6 +27,30 @@ public class ReviewController {
             .map(review -> sentimentService.ensureSentiment(review, reviewRepository))
             .map(reviewMapper::toDto)
             .toList();
+    }
+
+    @GetMapping("/summary")
+    public ReviewSummaryDto getReviewSummary(@PathVariable Long productId) {
+        var reviews = reviewRepository.findByProductIdOrderByCreatedAtDesc(productId);
+        var sentimentCounts = new HashMap<String, Long>();
+        sentimentCounts.put("positive", 0L);
+        sentimentCounts.put("neutral", 0L);
+        sentimentCounts.put("negative", 0L);
+
+        for (Object[] result : reviewRepository.countBySentimentLabel(productId)) {
+            String label = result[0] == null ? null : result[0].toString().trim().toLowerCase();
+            Long count = ((Number) result[1]).longValue();
+
+            if (label != null && sentimentCounts.containsKey(label)) {
+                sentimentCounts.put(label, count);
+            }
+        }
+
+        return new ReviewSummaryDto(
+            reviews.size(),
+            reviewRepository.averageRating(productId),
+            sentimentCounts
+        );
     }
 
     @PostMapping
